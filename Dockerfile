@@ -18,6 +18,8 @@ EXPOSE 3000
 #	npm i
 
 FROM base as dev
+COPY ./package-lock.json /usr/src/app/package-lock.json
+COPY ./package.json /usr/src/app/package.json
 RUN 	--mount=type=cache,target=/root/.npm \
 	npm ci --include=dev
 
@@ -30,6 +32,8 @@ CMD npm run dev
 # into this layer.
 
 FROM base as prod
+COPY ./package-lock.json /usr/src/app/package-lock.json
+COPY ./package.json /usr/src/app/package.json
 RUN --mount=type=cache,target=/root/.npm \
 	npm ci --omit=dev
 USER node	
