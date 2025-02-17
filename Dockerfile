@@ -41,3 +41,13 @@ COPY . .
 
 # Run the application.
 CMD node src/index.js
+
+FROM base as test
+COPY ./package-lock.json /usr/src/app/package-lock.json
+COPY ./package.json /usr/src/app/package.json
+ENV NODE_ENV test
+RUN --mount=type=cache,target=/root/.npm \
+	npm ci --include=dev
+USER node
+COPY . .
+RUN npm run test
